@@ -1,7 +1,7 @@
 {
   "name": "space-tetris",
   "version": "0.1.0",
-  "homepage": "https://ktran24.github.io/space-tetris",
+  "homepage": "https://tran4code.github.io/space-tetris",
   "private": true,
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
