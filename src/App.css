@@ -1,38 +1,101 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #0a0a0a;
+  color: #ffffff;
+  overflow-x: hidden;
+}
+
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  background-color: #0a0a0a;
 }
 
-.App-link {
-  color: #61dafb;
+.grid-cell {
+  transition: all 0.2s ease;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.grid-cell.can-drop {
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+  border-color: #00ff00 !important;
+}
+
+.grid-cell.cannot-drop {
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+  border-color: #ff0000 !important;
+}
+
+.grid-cell.occupied {
+  background-color: rgba(42, 42, 42, 0.8) !important;
+}
+
+.grid-cell.preview-valid {
+  background-color: rgba(0, 255, 0, 0.3) !important;
+  border-color: #00ff00 !important;
+  box-shadow: 0 0 8px rgba(0, 255, 0, 0.4);
+}
+
+.grid-cell.preview-invalid {
+  background-color: rgba(255, 0, 0, 0.3) !important;
+  border-color: #ff0000 !important;
+  box-shadow: 0 0 8px rgba(255, 0, 0, 0.4);
+}
+
+.draggable-piece {
+  transition: all 0.2s ease;
+}
+
+.draggable-piece:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.2);
+}
+
+.draggable-piece.selected {
+  filter: brightness(1.3);
+  transform: scale(1.05);
+}
+
+.piece-panel {
+  scrollbar-width: thin;
+  scrollbar-color: #333 #0a0a0a;
+}
+
+.piece-panel::-webkit-scrollbar {
+  width: 8px;
+}
+
+.piece-panel::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+
+.piece-panel::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 4px;
+}
+
+.piece-panel::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+@media (max-width: 1200px) {
+  .App {
+    padding: 10px;
   }
-  to {
-    transform: rotate(360deg);
+  
+  .game-grid {
+    transform: scale(0.8);
+  }
+  
+  .piece-panel {
+    width: 240px;
   }
 }
