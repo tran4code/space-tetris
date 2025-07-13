@@ -26,6 +26,7 @@ export interface GameState {
   previewPosition: { x: number; y: number } | null;
   lineClearAnimation: { rows: number[]; cols: number[] } | null;
   availablePoints: number; // Points available to spend on revealing image
+  adminMode: boolean; // Secret admin mode for free comet destruction
 }
 
 export interface GameActions {
@@ -40,6 +41,7 @@ export interface GameActions {
   rotateSelectedPiece: (direction: 'clockwise' | 'counterclockwise') => void;
   generateNewPieces: () => void;
   spendPoints: (pointsSpent: number) => void;
+  toggleAdminMode: () => void;
 }
 
 export const useGameStore = create<GameState & GameActions>((set, get) => ({
@@ -56,6 +58,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   previewPosition: null,
   lineClearAnimation: null,
   availablePoints: 0,
+  adminMode: false,
 
   // Actions
   startGame: () => {
@@ -72,6 +75,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       previewPosition: null,
       lineClearAnimation: null,
       availablePoints: 0,
+      adminMode: false,
     });
   },
 
@@ -220,6 +224,13 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     const { availablePoints } = get();
     set({
       availablePoints: Math.max(0, availablePoints - pointsSpent)
+    });
+  },
+
+  toggleAdminMode: () => {
+    const { adminMode } = get();
+    set({
+      adminMode: !adminMode
     });
   },
 }));

@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { useGameStore } from '../store/gameStore';
 
 export const MainMenu: React.FC = () => {
-  const { startGame } = useGameStore();
+  const { startGame, toggleAdminMode } = useGameStore();
 
   return (
     <motion.div
@@ -58,7 +58,14 @@ export const MainMenu: React.FC = () => {
         }}
       >
         <p>🌍 Drag and drop space-themed pieces to fill rows and columns!</p>
-        <p>⭐ Complete lines to score points and clear the galaxy!</p>
+        <p>
+          <span 
+            onClick={toggleAdminMode}
+            style={{ cursor: 'pointer' }}
+          >
+            ⭐
+          </span> Complete lines to score points and clear the galaxy!
+        </p>
         <p>🛸 Pieces spawn with random rotations - hover and use arrow keys to rotate!</p>
         <p>🔄 ↑/→ = Clockwise | ↓/← = Counterclockwise</p>
       </motion.div>
