@@ -98,7 +98,7 @@ export const PIECE_TYPES: PieceType[] = [
     id: 'I',
     name: 'Rocket Trail',
     emoji: '🚀',
-    color: '#ff6b6b',
+    color: '#ff4757',
     shape: [
       [1, 1, 1, 1]
     ]
@@ -107,7 +107,7 @@ export const PIECE_TYPES: PieceType[] = [
     id: 'O',
     name: 'Planet Cluster',
     emoji: '🌍',
-    color: '#4ecdc4',
+    color: '#00d2d3',
     shape: [
       [1, 1],
       [1, 1]
@@ -117,7 +117,7 @@ export const PIECE_TYPES: PieceType[] = [
     id: 'T',
     name: 'Star Constellation',
     emoji: '⭐',
-    color: '#ffe66d',
+    color: '#ffa502',
     shape: [
       [0, 1, 0],
       [1, 1, 1]
@@ -127,7 +127,7 @@ export const PIECE_TYPES: PieceType[] = [
     id: 'L',
     name: 'UFO Formation',
     emoji: '🛸',
-    color: '#a8e6cf',
+    color: '#2ed573',
     shape: [
       [1, 0],
       [1, 0],
@@ -138,7 +138,7 @@ export const PIECE_TYPES: PieceType[] = [
     id: 'J',
     name: 'Satellite Array',
     emoji: '🛰️',
-    color: '#c7ceea',
+    color: '#5352ed',
     shape: [
       [0, 1],
       [0, 1],
@@ -149,7 +149,7 @@ export const PIECE_TYPES: PieceType[] = [
     id: 'S',
     name: 'Comet Trail',
     emoji: '☄️',
-    color: '#ffd93d',
+    color: '#ff6348',
     shape: [
       [0, 1, 1],
       [1, 1, 0]
@@ -159,7 +159,7 @@ export const PIECE_TYPES: PieceType[] = [
     id: 'Z',
     name: 'Astronaut Team',
     emoji: '👨‍🚀',
-    color: '#74b9ff',
+    color: '#3742fa',
     shape: [
       [1, 1, 0],
       [0, 1, 1]
@@ -169,7 +169,7 @@ export const PIECE_TYPES: PieceType[] = [
     id: 'T2',
     name: 'Space Station',
     emoji: '🌙',
-    color: '#9b59b6',
+    color: '#a55eea',
     shape: [
       [0, 1, 0],
       [1, 1, 1]
