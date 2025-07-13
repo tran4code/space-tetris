@@ -125,25 +125,35 @@ export const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
         }}>
           {cometBlocks.map((row, rowIndex) =>
             row.map((isCovered, colIndex) => (
-              <div
-                key={`${rowIndex}-${colIndex}`}
-                onClick={() => handleCometClick(rowIndex, colIndex)}
-                style={{
-                  width: `${BLOCK_SIZE}px`,
-                  height: `${BLOCK_SIZE}px`,
-                  backgroundColor: isCovered ? '#000000' : 'transparent',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '8px',
-                  transition: 'all 0.3s ease',
-                  cursor: isCovered && availablePoints >= POINTS_PER_BLOCK ? 'pointer' : 'default',
-                  opacity: 1, // Always fully opaque to hide Sally completely
-                  filter: isCovered && availablePoints >= POINTS_PER_BLOCK ? 'brightness(1.2)' : (isCovered ? 'brightness(0.8)' : 'brightness(1)'),
-                }}
-              >
-                {isCovered ? '☄️' : ''}
-              </div>
+              isCovered ? (
+                <div
+                  key={`${rowIndex}-${colIndex}`}
+                  onClick={() => handleCometClick(rowIndex, colIndex)}
+                  style={{
+                    width: `${BLOCK_SIZE}px`,
+                    height: `${BLOCK_SIZE}px`,
+                    backgroundColor: '#000000',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '8px',
+                    transition: 'all 0.3s ease',
+                    cursor: availablePoints >= POINTS_PER_BLOCK ? 'pointer' : 'default',
+                    opacity: 1,
+                    filter: availablePoints >= POINTS_PER_BLOCK ? 'brightness(1.2)' : 'brightness(0.8)',
+                  }}
+                >
+                  ☄️
+                </div>
+              ) : (
+                <div
+                  key={`${rowIndex}-${colIndex}`}
+                  style={{
+                    width: `${BLOCK_SIZE}px`,
+                    height: `${BLOCK_SIZE}px`,
+                  }}
+                />
+              )
             ))
           )}
         </div>
