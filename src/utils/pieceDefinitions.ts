@@ -57,6 +57,7 @@ function getPieceRotation(piece: PieceType): number {
   let testShape = originalShape;
   for (let rotation = 90; rotation <= 270; rotation += 90) {
     // Rotate the original shape
+    // eslint-disable-next-line no-loop-func
     testShape = testShape[0].map((_, colIndex) =>
       testShape.map(row => row[colIndex]).reverse()
     );

@@ -7,6 +7,7 @@ export function generateAllRotations(basePiece: PieceType): PieceType[] {
   
   // Generate 3 more rotations (90°, 180°, 270°)
   for (let i = 1; i < 4; i++) {
+    // eslint-disable-next-line no-loop-func
     const newShape = currentShape[0].map((_, colIndex) =>
       currentShape.map(row => row[colIndex]).reverse()
     );

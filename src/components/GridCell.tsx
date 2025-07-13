@@ -17,7 +17,7 @@ export const GridCell: React.FC<GridCellProps> = ({ x, y, content, isAnimating, 
   const { grid, draggedPiece, draggedPieceInstanceId, placePieceOnGrid, setPreviewPosition } = useGameStore();
   const ref = useRef<HTMLDivElement>(null);
 
-  const [{ isOver, canDrop, draggedItem }, drop] = useDrop(() => ({
+  const [{ isOver, canDrop }, drop] = useDrop(() => ({
     accept: 'piece',
     drop: (item: { piece: PieceType; pieceInstanceId: string }) => {
       // Find the best placement position based on where the user is dropping
@@ -45,7 +45,6 @@ export const GridCell: React.FC<GridCellProps> = ({ x, y, content, isAnimating, 
     collect: (monitor) => ({
       isOver: monitor.isOver(),
       canDrop: monitor.canDrop(),
-      draggedItem: monitor.getItem(),
     }),
   }), [x, y, draggedPiece, draggedPieceInstanceId, grid, placePieceOnGrid, setPreviewPosition]);
 
