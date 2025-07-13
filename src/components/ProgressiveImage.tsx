@@ -114,8 +114,13 @@ export const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
       }}>
         {/* The Sally Ride image */}
         <img
-          src="/sally-ride.png"
+          src={`${process.env.PUBLIC_URL}/sally-ride.png`}
           alt="Sally Ride"
+          onError={(e) => {
+            console.error('Failed to load Sally Ride image:', e);
+            e.currentTarget.style.display = 'none';
+          }}
+          onLoad={() => console.log('Sally Ride image loaded successfully')}
           style={{
             width: '100%',
             height: '100%',
