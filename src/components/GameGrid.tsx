@@ -92,8 +92,9 @@ export const GameGrid: React.FC = () => {
       {grid.map((row, y) =>
         row.map((cell, x) => {
           const previewEmoji = getPreviewEmoji(x, y);
-          const displayContent = cell ? cell.emoji : (isPreviewCell(x, y) ? previewEmoji : null);
-          const cellColor = cell ? cell.color : (isPreviewCell(x, y) ? draggedPiece?.color : null);
+          const isPreview = isPreviewCell(x, y);
+          const displayContent = cell ? cell.emoji : (isPreview ? previewEmoji : null);
+          const cellColor = cell ? cell.color : (isPreview ? draggedPiece?.color : null);
           
           return (
             <GridCell
@@ -103,7 +104,7 @@ export const GameGrid: React.FC = () => {
               content={displayContent}
               color={cellColor}
               isAnimating={isAnimatingCell(x, y)}
-              isPreview={isPreviewCell(x, y)}
+              isPreview={isPreview}
             />
           );
         })

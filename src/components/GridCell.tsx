@@ -18,6 +18,11 @@ export const GridCell: React.FC<GridCellProps> = ({ x, y, content, color, isAnim
   const { grid, draggedPiece, draggedPieceInstanceId, placePieceOnGrid, setPreviewPosition } = useGameStore();
   const ref = useRef<HTMLDivElement>(null);
 
+  // Debug log to see what color we're getting
+  if (content && !isPreview && color) {
+    console.log(`Cell ${x},${y}: content=${content}, color=${color}, isPreview=${isPreview}`);
+  }
+
   const [{ isOver, canDrop }, drop] = useDrop(() => ({
     accept: 'piece',
     drop: (item: { piece: PieceType; pieceInstanceId: string }) => {
