@@ -57,6 +57,21 @@ export function repopulateMeteorities(grid: GameGrid, linesCleared: { rows: numb
   return newGrid;
 }
 
+// Function to update existing meteorites to use the new color
+export function updateMeteoriteColors(grid: GameGrid): GameGrid {
+  const newGrid = grid.map(row => [...row]);
+  
+  for (let y = 0; y < GRID_HEIGHT; y++) {
+    for (let x = 0; x < GRID_WIDTH; x++) {
+      if (newGrid[y][x] && newGrid[y][x]!.emoji === '🌑') {
+        newGrid[y][x] = { emoji: '🌑', color: '#777' };
+      }
+    }
+  }
+  
+  return newGrid;
+}
+
 export function canPlacePiece(
   grid: GameGrid,
   piece: PieceType,

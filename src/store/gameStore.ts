@@ -11,6 +11,7 @@ import {
   calculateScore,
   hasValidMoves,
   repopulateMeteorities,
+  updateMeteoriteColors,
 } from '../utils/gameHelpers';
 
 export interface GameState {
@@ -63,8 +64,9 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   // Actions
   startGame: () => {
     const { adminMode } = get(); // Preserve admin mode
+    const initialGrid = updateMeteoriteColors(createGridWithMeteorities());
     set({
-      grid: createGridWithMeteorities(),
+      grid: initialGrid,
       score: 0,
       linesCleared: 0,
       level: 1,
