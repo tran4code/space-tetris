@@ -21,7 +21,7 @@ export function createGridWithMeteorities(): GameGrid {
       y = Math.floor(Math.random() * GRID_HEIGHT);
     } while (grid[y][x] !== null);
     
-    grid[y][x] = { emoji: '🌑', color: '#555' };
+    grid[y][x] = { emoji: '🌑', color: '#777' };
   }
   
   return grid;
@@ -37,7 +37,7 @@ export function repopulateMeteorities(grid: GameGrid, linesCleared: { rows: numb
     for (let j = 0; j < meteoriteCount; j++) {
       const x = Math.floor(Math.random() * GRID_WIDTH);
       if (newGrid[i][x] === null) { // Only place if cell is empty
-        newGrid[i][x] = { emoji: '🌑', color: '#555' };
+        newGrid[i][x] = { emoji: '🌑', color: '#777' };
       }
     }
   }
@@ -49,7 +49,7 @@ export function repopulateMeteorities(grid: GameGrid, linesCleared: { rows: numb
     for (let j = 0; j < meteoriteCount; j++) {
       const y = Math.floor(Math.random() * GRID_HEIGHT);
       if (newGrid[y][i] === null) { // Only place if cell is empty
-        newGrid[y][i] = { emoji: '🌑', color: '#555' };
+        newGrid[y][i] = { emoji: '🌑', color: '#777' };
       }
     }
   }
