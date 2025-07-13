@@ -145,15 +145,7 @@ export const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
                 >
                   ☄️
                 </div>
-              ) : (
-                <div
-                  key={`${rowIndex}-${colIndex}`}
-                  style={{
-                    width: `${BLOCK_SIZE}px`,
-                    height: `${BLOCK_SIZE}px`,
-                  }}
-                />
-              )
+              ) : null
             ))
           )}
         </div>
