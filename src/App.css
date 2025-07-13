@@ -53,11 +53,11 @@ body {
 
 .draggable-piece:hover {
   transform: translateY(-2px);
-  filter: brightness(1.2);
+  filter: brightness(1.05);
 }
 
 .draggable-piece.selected {
-  filter: brightness(1.3);
+  filter: brightness(1.1);
   transform: scale(1.05);
 }
 

@@ -56,7 +56,7 @@ export const DraggablePiece: React.FC<DraggablePieceProps> = ({ piece, index }) 
                   alignItems: 'center',
                   justifyContent: 'center',
                   fontSize: '20px',
-                  backgroundColor: cell ? piece.color : 'transparent',
+                  backgroundColor: cell ? `${piece.color}80` : 'transparent',
                   border: cell ? '2px solid rgba(255,255,255,0.4)' : 'none',
                   borderRadius: '4px',
                   boxShadow: cell ? '0 2px 8px rgba(0,0,0,0.3)' : 'none',
