@@ -20,6 +20,8 @@ export const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
   const [cometBlocks, setCometBlocks] = useState<boolean[][]>(() => 
     Array(GRID_HEIGHT).fill(null).map(() => Array(GRID_WIDTH).fill(true))
   );
+  
+  const [adminMode, setAdminMode] = useState(false);
 
   // Click-based destruction with preset options
   const destructionOptions = [
@@ -33,7 +35,17 @@ export const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
     // Only allow clicking if the block is covered
     if (!cometBlocks[rowIndex][colIndex]) return;
 
-    // Check if we have enough points for single destruction
+    // Admin mode: destroy any comet without cost
+    if (adminMode) {
+      setCometBlocks(prev => {
+        const newGrid = prev.map(row => [...row]);
+        newGrid[rowIndex][colIndex] = false;
+        return newGrid;
+      });
+      return;
+    }
+
+    // Normal mode: check if we have enough points for single destruction
     if (availablePoints < POINTS_PER_BLOCK) return;
 
     // Remove the clicked block
@@ -138,7 +150,7 @@ export const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
                     justifyContent: 'center',
                     fontSize: '8px',
                     transition: 'all 0.3s ease',
-                    cursor: availablePoints >= POINTS_PER_BLOCK ? 'pointer' : 'default',
+                    cursor: (adminMode || availablePoints >= POINTS_PER_BLOCK) ? 'pointer' : 'default',
                     opacity: 1,
                     filter: availablePoints >= POINTS_PER_BLOCK ? 'brightness(1.2)' : 'brightness(0.8)',
                   }}
@@ -169,7 +181,7 @@ export const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
         </div>
 
         <div style={{ fontSize: '9px', marginBottom: '8px', color: '#888' }}>
-          Click comet blocks to destroy (10 pts each)
+          Click comet blocks to destroy {adminMode ? '(ADMIN MODE - FREE)' : '(10 pts each)'}
         </div>
 
         <div style={{ fontSize: '10px', marginBottom: '10px', color: '#bbb', fontWeight: 'bold' }}>
@@ -196,6 +208,25 @@ export const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
               {option.count} blocks ({option.cost} pts)
             </button>
           ))}
+        </div>
+
+        {/* Secret Admin Button */}
+        <div style={{ marginTop: '10px', borderTop: '1px solid #333', paddingTop: '8px' }}>
+          <button
+            onClick={() => setAdminMode(!adminMode)}
+            style={{
+              padding: '4px 8px',
+              backgroundColor: adminMode ? '#ff6b6b' : '#333',
+              color: adminMode ? '#fff' : '#888',
+              border: 'none',
+              borderRadius: '3px',
+              cursor: 'pointer',
+              fontSize: '8px',
+              width: '100%',
+            }}
+          >
+            {adminMode ? '🔓 Admin Mode ON' : '🔒 Admin Mode'}
+          </button>
         </div>
       </div>
     </div>
