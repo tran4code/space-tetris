@@ -169,7 +169,7 @@ export const PIECE_TYPES: PieceType[] = [
     id: 'T2',
     name: 'Space Station',
     emoji: '🌙',
-    color: '#2c3e50',
+    color: '#34495e',
     shape: [
       [0, 1, 0],
       [1, 1, 1]
