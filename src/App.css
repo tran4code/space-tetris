@@ -34,9 +34,6 @@ body {
   border-color: #ff0000 !important;
 }
 
-.grid-cell.occupied {
-  background-color: rgba(42, 42, 42, 0.8) !important;
-}
 
 .grid-cell.preview-valid {
   background-color: rgba(0, 255, 0, 0.3) !important;
