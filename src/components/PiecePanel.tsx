@@ -13,7 +13,7 @@ export const PiecePanel: React.FC = () => {
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.5, delay: 0.2 }}
       style={{
-        width: '280px',
+        width: '350px',
         height: '650px',
         padding: '20px',
         backgroundColor: '#0a0a0a',
