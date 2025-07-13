@@ -126,22 +126,24 @@ export const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
           }}
         />
         
-        {/* Comet block overlay */}
+        {/* Comet block overlay - only render covered blocks */}
         <div style={{
           position: 'absolute',
           top: 0,
           left: 0,
-          display: 'grid',
-          gridTemplateColumns: `repeat(${GRID_WIDTH}, ${BLOCK_SIZE}px)`,
-          gridTemplateRows: `repeat(${GRID_HEIGHT}, ${BLOCK_SIZE}px)`,
+          width: '100%',
+          height: '100%',
         }}>
           {cometBlocks.map((row, rowIndex) =>
             row.map((isCovered, colIndex) => (
               isCovered ? (
                 <div
-                  key={`${rowIndex}-${colIndex}`}
+                  key={`comet-${rowIndex}-${colIndex}`}
                   onClick={() => handleCometClick(rowIndex, colIndex)}
                   style={{
+                    position: 'absolute',
+                    left: `${colIndex * BLOCK_SIZE}px`,
+                    top: `${rowIndex * BLOCK_SIZE}px`,
                     width: `${BLOCK_SIZE}px`,
                     height: `${BLOCK_SIZE}px`,
                     backgroundColor: '#000000',
@@ -152,7 +154,8 @@ export const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
                     transition: 'all 0.3s ease',
                     cursor: (adminMode || availablePoints >= POINTS_PER_BLOCK) ? 'pointer' : 'default',
                     opacity: 1,
-                    filter: availablePoints >= POINTS_PER_BLOCK ? 'brightness(1.2)' : 'brightness(0.8)',
+                    filter: (adminMode || availablePoints >= POINTS_PER_BLOCK) ? 'brightness(1.2)' : 'brightness(0.8)',
+                    zIndex: 10,
                   }}
                 >
                   ☄️
