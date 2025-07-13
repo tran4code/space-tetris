@@ -62,6 +62,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
 
   // Actions
   startGame: () => {
+    const { adminMode } = get(); // Preserve admin mode
     set({
       grid: createGridWithMeteorities(),
       score: 0,
@@ -75,7 +76,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       previewPosition: null,
       lineClearAnimation: null,
       availablePoints: 0,
-      adminMode: false,
+      adminMode, // Keep the current admin mode state
     });
   },
 
