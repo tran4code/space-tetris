@@ -114,8 +114,7 @@ export const GridCell: React.FC<GridCellProps> = ({ x, y, content, color, isAnim
         alignItems: 'center',
         justifyContent: 'center',
         fontSize: '24px',
-        backgroundColor: content ? (isPreview ? 'transparent' : (color || '#2a2a2a')) : 'transparent',
-        boxShadow: content && !isPreview && color ? `inset 0 0 0 2px ${color}80` : 'none',
+        backgroundColor: content ? (isPreview ? 'transparent' : color ? `${color}E6` : '#2a2a2a') : 'transparent',
         position: 'relative',
         opacity: isPreview ? 0.8 : 1,
       }}
