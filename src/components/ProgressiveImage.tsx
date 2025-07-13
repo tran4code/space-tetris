@@ -110,7 +110,7 @@ export const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
         border: '3px solid #333',
         borderRadius: '8px',
         overflow: 'hidden',
-        backgroundColor: '#000',
+        backgroundColor: 'transparent',
       }}>
         {/* The Sally Ride image */}
         <img
@@ -146,16 +146,24 @@ export const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
                     top: `${rowIndex * BLOCK_SIZE}px`,
                     width: `${BLOCK_SIZE}px`,
                     height: `${BLOCK_SIZE}px`,
-                    backgroundColor: '#000000',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    fontSize: '8px',
+                    fontSize: `${BLOCK_SIZE - 2}px`,
                     transition: 'all 0.3s ease',
                     cursor: (adminMode || availablePoints >= POINTS_PER_BLOCK) ? 'pointer' : 'default',
-                    opacity: 1,
                     filter: (adminMode || availablePoints >= POINTS_PER_BLOCK) ? 'brightness(1.2)' : 'brightness(0.8)',
                     zIndex: 10,
+                    textShadow: `
+                      -2px -2px 0 #000,  
+                       2px -2px 0 #000,
+                      -2px  2px 0 #000,
+                       2px  2px 0 #000,
+                      -4px -4px 4px #000,
+                       4px -4px 4px #000,
+                      -4px  4px 4px #000,
+                       4px  4px 4px #000
+                    `,
                   }}
                 >
                   ☄️
