@@ -6,9 +6,9 @@ interface ProgressiveImageProps {
   onPointsSpent: (pointsSpent: number) => void;
 }
 
-const GRID_WIDTH = 25;
-const GRID_HEIGHT = 20;
-const BLOCK_SIZE = 14; // Slightly bigger blocks for better image size
+const GRID_WIDTH = 20;
+const GRID_HEIGHT = 16;
+const BLOCK_SIZE = 21; // Bigger blocks for better coverage
 const POINTS_PER_BLOCK = 10; // Cost to reveal one block
 
 export const ProgressiveImage: React.FC<ProgressiveImageProps> = ({ 
@@ -145,7 +145,7 @@ export const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    fontSize: `${BLOCK_SIZE - 2}px`,
+                    fontSize: `${BLOCK_SIZE}px`,
                     transition: 'all 0.3s ease',
                     cursor: availablePoints >= POINTS_PER_BLOCK ? 'pointer' : 'default',
                     filter: availablePoints >= POINTS_PER_BLOCK ? 'brightness(1.2)' : 'brightness(0.8)',
