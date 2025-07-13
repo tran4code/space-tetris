@@ -142,7 +142,7 @@ export const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
           {cometBlocks.map((row, rowIndex) =>
             row.map((isCovered, colIndex) => (
               isCovered ? (
-                <span
+                <div
                   key={`comet-${rowIndex}-${colIndex}`}
                   onClick={() => handleCometClick(rowIndex, colIndex)}
                   style={{
@@ -151,6 +151,7 @@ export const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
                     top: `${rowIndex * BLOCK_SIZE}px`,
                     width: `${BLOCK_SIZE}px`,
                     height: `${BLOCK_SIZE}px`,
+                    backgroundColor: '#1a1a2e',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -159,16 +160,10 @@ export const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
                     cursor: (adminMode || availablePoints >= POINTS_PER_BLOCK) ? 'pointer' : 'default',
                     filter: (adminMode || availablePoints >= POINTS_PER_BLOCK) ? 'brightness(1.2)' : 'brightness(0.8)',
                     zIndex: 10,
-                    textShadow: `
-                      -1px -1px 0 #000,  
-                       1px -1px 0 #000,
-                      -1px  1px 0 #000,
-                       1px  1px 0 #000
-                    `,
                   }}
                 >
                   ☄️
-                </span>
+                </div>
               ) : null
             ))
           )}
