@@ -1,6 +1,6 @@
 import { PieceType } from './pieceDefinitions';
 
-export type GridCell = string | null;
+export type GridCell = { emoji: string; color: string } | null;
 export type GameGrid = GridCell[][];
 
 export const GRID_WIDTH = 10;
@@ -21,7 +21,7 @@ export function createGridWithMeteorities(): GameGrid {
       y = Math.floor(Math.random() * GRID_HEIGHT);
     } while (grid[y][x] !== null);
     
-    grid[y][x] = '🌑';
+    grid[y][x] = { emoji: '🌑', color: '#333' };
   }
   
   return grid;
@@ -37,7 +37,7 @@ export function repopulateMeteorities(grid: GameGrid, linesCleared: { rows: numb
     for (let j = 0; j < meteoriteCount; j++) {
       const x = Math.floor(Math.random() * GRID_WIDTH);
       if (newGrid[i][x] === null) { // Only place if cell is empty
-        newGrid[i][x] = '🌑';
+        newGrid[i][x] = { emoji: '🌑', color: '#333' };
       }
     }
   }
@@ -49,7 +49,7 @@ export function repopulateMeteorities(grid: GameGrid, linesCleared: { rows: numb
     for (let j = 0; j < meteoriteCount; j++) {
       const y = Math.floor(Math.random() * GRID_HEIGHT);
       if (newGrid[y][i] === null) { // Only place if cell is empty
-        newGrid[y][i] = '🌑';
+        newGrid[y][i] = { emoji: '🌑', color: '#333' };
       }
     }
   }
@@ -97,7 +97,7 @@ export function placePiece(
       if (piece.shape[y][x] === 1) {
         const gridX = startX + x;
         const gridY = startY + y;
-        newGrid[gridY][gridX] = piece.emoji;
+        newGrid[gridY][gridX] = { emoji: piece.emoji, color: piece.color };
       }
     }
   }

@@ -9,11 +9,12 @@ interface GridCellProps {
   x: number;
   y: number;
   content: string | null;
+  color?: string | null;
   isAnimating?: boolean;
   isPreview?: boolean;
 }
 
-export const GridCell: React.FC<GridCellProps> = ({ x, y, content, isAnimating, isPreview }) => {
+export const GridCell: React.FC<GridCellProps> = ({ x, y, content, color, isAnimating, isPreview }) => {
   const { grid, draggedPiece, draggedPieceInstanceId, placePieceOnGrid, setPreviewPosition } = useGameStore();
   const ref = useRef<HTMLDivElement>(null);
 
@@ -112,7 +113,7 @@ export const GridCell: React.FC<GridCellProps> = ({ x, y, content, isAnimating, 
         alignItems: 'center',
         justifyContent: 'center',
         fontSize: '24px',
-        backgroundColor: content ? (isPreview ? 'transparent' : '#2a2a2a') : 'transparent',
+        backgroundColor: content ? (isPreview ? 'transparent' : (color || '#2a2a2a')) : 'transparent',
         position: 'relative',
         opacity: isPreview ? 0.8 : 1,
       }}

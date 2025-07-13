@@ -13,9 +13,9 @@ export const ScoreBoard: React.FC = () => {
       transition={{ duration: 0.5 }}
       style={{
         display: 'flex',
-        justifyContent: 'space-around',
+        justifyContent: 'space-between',
         alignItems: 'center',
-        padding: '20px',
+        padding: '30px 40px',
         backgroundColor: '#0a0a0a',
         border: '2px solid #1a1a3a',
         borderRadius: '8px',
@@ -29,8 +29,8 @@ export const ScoreBoard: React.FC = () => {
         `,
       }}
     >
-      <div style={{ textAlign: 'center' }}>
-        <div style={{ fontSize: '14px', color: '#888', marginBottom: '4px' }}>
+      <div style={{ textAlign: 'center', minWidth: '120px' }}>
+        <div style={{ fontSize: '14px', color: '#888', marginBottom: '8px' }}>
           Score
         </div>
         <motion.div
@@ -43,8 +43,8 @@ export const ScoreBoard: React.FC = () => {
         </motion.div>
       </div>
       
-      <div style={{ textAlign: 'center' }}>
-        <div style={{ fontSize: '14px', color: '#888', marginBottom: '4px' }}>
+      <div style={{ textAlign: 'center', minWidth: '120px' }}>
+        <div style={{ fontSize: '14px', color: '#888', marginBottom: '8px' }}>
           Lines
         </div>
         <motion.div
@@ -57,8 +57,8 @@ export const ScoreBoard: React.FC = () => {
         </motion.div>
       </div>
       
-      <div style={{ textAlign: 'center' }}>
-        <div style={{ fontSize: '14px', color: '#888', marginBottom: '4px' }}>
+      <div style={{ textAlign: 'center', minWidth: '120px' }}>
+        <div style={{ fontSize: '14px', color: '#888', marginBottom: '8px' }}>
           Level
         </div>
         <motion.div
@@ -71,8 +71,8 @@ export const ScoreBoard: React.FC = () => {
         </motion.div>
       </div>
       
-      <div style={{ textAlign: 'center' }}>
-        <div style={{ fontSize: '14px', color: '#888', marginBottom: '4px' }}>
+      <div style={{ textAlign: 'center', minWidth: '120px' }}>
+        <div style={{ fontSize: '14px', color: '#888', marginBottom: '8px' }}>
           Status
         </div>
         <div
