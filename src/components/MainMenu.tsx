@@ -1,109 +1,193 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useGameStore } from '../store/gameStore';
+import { PALETTE } from '../utils/pieceDefinitions';
+import { TOKENS } from '../utils/theme';
+import { GridPiece } from './GridPiece';
 
 export const MainMenu: React.FC = () => {
-  const { startGame, toggleAdminMode } = useGameStore();
+  const { startGame, best, theme, toggleTheme } = useGameStore();
+  const tokens = TOKENS[theme];
+
+  const previewShapes = ['PLANET', 'ROCKET', 'ASTRONAUT', 'STATION', 'COMET', 'MOON'] as const;
 
   return (
     <motion.div
-      className="main-menu"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       style={{
+        minHeight: '100vh',
+        backgroundColor: tokens.pageBg,
+        color: tokens.pageInk,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        height: '100vh',
-        backgroundColor: '#0a0a0a',
-        color: '#fff',
-        backgroundImage: `
-          radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-          radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.15) 0%, transparent 50%),
-          radial-gradient(circle at 40% 40%, rgba(120, 200, 255, 0.1) 0%, transparent 50%)
-        `,
+        padding: 40,
+        position: 'relative',
       }}
     >
-      <motion.h1
-        initial={{ y: -50, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.2 }}
+      <button
+        onClick={toggleTheme}
+        aria-label="Toggle theme"
         style={{
-          fontSize: '4rem',
-          fontWeight: 'bold',
-          marginBottom: '2rem',
-          textAlign: 'center',
-          background: 'linear-gradient(45deg, #4ecdc4, #44a08d)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          backgroundClip: 'text',
+          position: 'absolute',
+          top: 20,
+          right: 20,
+          padding: '8px 14px',
+          fontSize: 10,
+          letterSpacing: 2,
+          fontWeight: 700,
+          textTransform: 'uppercase',
+          background: PALETTE.cardBg,
+          color: PALETTE.ink,
+          border: `2px solid ${PALETTE.outline}`,
+          borderRadius: 8,
+          cursor: 'pointer',
         }}
       >
-        🚀 Space Tetris 🌌
-      </motion.h1>
-      
+        {theme === 'dark' ? '☀ Light' : '☾ Dark'}
+      </button>
       <motion.div
-        initial={{ scale: 0.8, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.5 }}
+        initial={{ y: -12, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.1, duration: 0.5 }}
         style={{
-          fontSize: '1.2rem',
-          marginBottom: '3rem',
-          textAlign: 'center',
-          color: '#ccc',
-          maxWidth: '600px',
-          lineHeight: '1.6',
+          fontFamily: '"JetBrains Mono", ui-monospace, SFMono-Regular, monospace',
+          fontSize: 11,
+          letterSpacing: 3,
+          backgroundColor: PALETTE.badge,
+          border: `1.5px solid ${PALETTE.outline}`,
+          padding: '4px 10px',
+          borderRadius: 4,
+          marginBottom: 18,
+          fontWeight: 700,
         }}
       >
-        <p>🌍 Drag and drop space-themed pieces to fill rows and columns!</p>
-        <p>
-          <span 
-            onClick={toggleAdminMode}
-            style={{ cursor: 'pointer' }}
-          >
-            ⭐
-          </span> Complete lines to score points and clear the galaxy!
-        </p>
-        <p>🛸 Pieces spawn with random rotations - hover and use arrow keys to rotate!</p>
-        <p>🔄 ↑/→ = Clockwise | ↓/← = Counterclockwise</p>
+        MISSION: ARTEMIS II
       </motion.div>
-      
+
+      <motion.h1
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.2, duration: 0.6 }}
+        style={{
+          fontSize: '3.8rem',
+          fontWeight: 900,
+          marginBottom: 8,
+          textAlign: 'center',
+          letterSpacing: -1,
+          color: tokens.pageInk,
+        }}
+      >
+        Orbit Blocks
+      </motion.h1>
+
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.35, duration: 0.5 }}
+        style={{
+          fontSize: '1.1rem',
+          color: tokens.pageMutedInk,
+          textAlign: 'center',
+          maxWidth: 560,
+          marginBottom: 32,
+          lineHeight: 1.5,
+        }}
+      >
+        A chill drag-to-fit puzzle. Pack spacecraft, planets and astronauts into
+        a 10&times;10 grid. Clear rows and columns to deep-space-clean the board.
+      </motion.p>
+
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5, duration: 0.5 }}
+        style={{
+          display: 'flex',
+          gap: 18,
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginBottom: 36,
+          maxWidth: 620,
+        }}
+      >
+        {previewShapes.map((s) => (
+          <div
+            key={s}
+            style={{
+              padding: 10,
+              backgroundColor: PALETTE.cardBg,
+              border: `2px solid ${PALETTE.outline}`,
+              borderRadius: 10,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              minWidth: 70,
+              minHeight: 70,
+            }}
+          >
+            <GridPiece shape={s} cellSize={22} />
+          </div>
+        ))}
+      </motion.div>
+
       <motion.button
         onClick={startGame}
-        whileHover={{ scale: 1.05, boxShadow: '0 10px 30px rgba(78, 205, 196, 0.3)' }}
-        whileTap={{ scale: 0.95 }}
-        initial={{ y: 50, opacity: 0 }}
+        whileHover={{ y: -2, boxShadow: '0 10px 24px rgba(30,42,74,0.25)' }}
+        whileTap={{ scale: 0.97 }}
+        initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.8 }}
+        transition={{ delay: 0.7, duration: 0.5 }}
         style={{
-          padding: '16px 32px',
-          fontSize: '1.5rem',
-          fontWeight: 'bold',
-          backgroundColor: '#4ecdc4',
-          color: '#000',
-          border: 'none',
-          borderRadius: '12px',
+          padding: '14px 38px',
+          fontSize: '1.1rem',
+          fontWeight: 800,
+          letterSpacing: 2,
+          textTransform: 'uppercase',
+          backgroundColor: PALETTE.orange,
+          color: PALETTE.ink,
+          border: `2.5px solid ${PALETTE.outline}`,
+          borderRadius: 10,
           cursor: 'pointer',
-          marginBottom: '2rem',
+          marginBottom: 18,
+          boxShadow: '0 6px 16px rgba(30,42,74,0.18)',
         }}
       >
-        🚀 Start Mission
+        Launch
       </motion.button>
-      
+
+      {best > 0 && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.9 }}
+          style={{
+            fontSize: 13,
+            color: tokens.pageMutedInk,
+            letterSpacing: 1,
+          }}
+        >
+          Personal best: <strong style={{ color: tokens.pageInk }}>{best.toLocaleString()}</strong>
+        </motion.div>
+      )}
+
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 1.2 }}
+        transition={{ delay: 1.0 }}
         style={{
-          fontSize: '0.9rem',
-          color: '#666',
+          marginTop: 28,
+          fontSize: 12,
+          color: tokens.pageMutedInk,
           textAlign: 'center',
+          lineHeight: 1.6,
         }}
       >
-        <p>🎯 Score System: Single line (100) | Double (300) | Triple (500) | Quad (800)</p>
-        <p>⌨️ Controls: Click & Drag | Arrow Keys to Rotate in Panel | ESC to Pause</p>
+        Drag pieces from Cargo Bay &bull; clear full rows/cols for bonus &bull; ESC to pause
       </motion.div>
     </motion.div>
   );

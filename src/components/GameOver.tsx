@@ -1,136 +1,151 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useGameStore } from '../store/gameStore';
+import { PALETTE } from '../utils/pieceDefinitions';
 
 export const GameOver: React.FC = () => {
-  const { score, linesCleared, level, resetGame } = useGameStore();
+  const { score, linesCleared, best, resetGame, returnToMenu } = useGameStore();
+  const isBest = score > 0 && score >= best;
 
   return (
     <motion.div
-      className="game-over"
-      initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.8 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
       style={{
         position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
+        inset: 0,
         display: 'flex',
-        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'rgba(10, 10, 10, 0.95)',
-        color: '#fff',
+        backgroundColor: 'rgba(240, 238, 233, 0.88)',
+        backdropFilter: 'blur(6px)',
         zIndex: 1000,
-        backdropFilter: 'blur(10px)',
       }}
     >
       <motion.div
-        initial={{ y: -50, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
+        initial={{ y: 20, scale: 0.95 }}
+        animate={{ y: 0, scale: 1 }}
+        transition={{ duration: 0.4 }}
         style={{
+          backgroundColor: PALETTE.cardBg,
+          border: `3px solid ${PALETTE.outline}`,
+          borderRadius: 18,
+          padding: '36px 48px',
           textAlign: 'center',
-          padding: '40px',
-          backgroundColor: 'rgba(0, 0, 0, 0.8)',
-          border: '2px solid #ff6b6b',
-          borderRadius: '16px',
-          boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3)',
+          maxWidth: 460,
+          boxShadow: '0 20px 60px rgba(30,42,74,0.25)',
         }}
       >
-        <h1
-          style={{
-            fontSize: '3rem',
-            fontWeight: 'bold',
-            marginBottom: '1rem',
-            color: '#ff6b6b',
-          }}
-        >
-          🌌 Mission Failed 🌌
-        </h1>
-        
         <div
           style={{
-            fontSize: '1.2rem',
-            marginBottom: '2rem',
-            color: '#ccc',
+            fontFamily: '"JetBrains Mono", ui-monospace, SFMono-Regular, monospace',
+            fontSize: 11,
+            letterSpacing: 3,
+            backgroundColor: PALETTE.badge,
+            border: `1.5px solid ${PALETTE.outline}`,
+            padding: '4px 10px',
+            borderRadius: 4,
+            display: 'inline-block',
+            marginBottom: 16,
+            fontWeight: 700,
           }}
         >
-          No more valid moves available!
+          SPLASHDOWN
         </div>
-        
+
+        <h2 style={{ fontSize: '2.2rem', fontWeight: 900, marginBottom: 8, color: PALETTE.ink }}>
+          {isBest ? 'New Best!' : 'Mission Complete'}
+        </h2>
+        <p style={{ color: PALETTE.grayDk, marginBottom: 24, fontSize: 14 }}>
+          No more pieces fit. The board is locked.
+        </p>
+
         <div
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: '2rem',
-            marginBottom: '2rem',
-            fontSize: '1.1rem',
+            gap: 12,
+            marginBottom: 28,
           }}
         >
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🏆</div>
-            <div style={{ color: '#4ecdc4', fontWeight: 'bold', fontSize: '1.5rem' }}>
+          <div
+            style={{
+              padding: 12,
+              border: `2px solid ${PALETTE.outline}`,
+              borderRadius: 10,
+              backgroundColor: '#fff',
+            }}
+          >
+            <div style={{ fontSize: 10, color: PALETTE.grayDk, letterSpacing: 2, fontWeight: 700 }}>SCORE</div>
+            <div style={{ fontSize: 22, fontWeight: 900, color: PALETTE.orangeDk }}>
               {score.toLocaleString()}
             </div>
-            <div style={{ color: '#888' }}>Final Score</div>
           </div>
-          
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>📊</div>
-            <div style={{ color: '#ffe66d', fontWeight: 'bold', fontSize: '1.5rem' }}>
-              {linesCleared}
-            </div>
-            <div style={{ color: '#888' }}>Lines Cleared</div>
+          <div
+            style={{
+              padding: 12,
+              border: `2px solid ${PALETTE.outline}`,
+              borderRadius: 10,
+              backgroundColor: '#fff',
+            }}
+          >
+            <div style={{ fontSize: 10, color: PALETTE.grayDk, letterSpacing: 2, fontWeight: 700 }}>LINES</div>
+            <div style={{ fontSize: 22, fontWeight: 900 }}>{linesCleared}</div>
           </div>
-          
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🚀</div>
-            <div style={{ color: '#74b9ff', fontWeight: 'bold', fontSize: '1.5rem' }}>
-              {level}
-            </div>
-            <div style={{ color: '#888' }}>Level Reached</div>
+          <div
+            style={{
+              padding: 12,
+              border: `2px solid ${PALETTE.outline}`,
+              borderRadius: 10,
+              backgroundColor: '#fff',
+            }}
+          >
+            <div style={{ fontSize: 10, color: PALETTE.grayDk, letterSpacing: 2, fontWeight: 700 }}>BEST</div>
+            <div style={{ fontSize: 22, fontWeight: 900 }}>{Math.max(score, best).toLocaleString()}</div>
           </div>
         </div>
-        
-        <motion.button
-          onClick={resetGame}
-          whileHover={{ scale: 1.05, boxShadow: '0 10px 30px rgba(78, 205, 196, 0.3)' }}
-          whileTap={{ scale: 0.95 }}
-          style={{
-            padding: '16px 32px',
-            fontSize: '1.2rem',
-            fontWeight: 'bold',
-            backgroundColor: '#4ecdc4',
-            color: '#000',
-            border: 'none',
-            borderRadius: '12px',
-            cursor: 'pointer',
-            marginRight: '1rem',
-          }}
-        >
-          🔄 Play Again
-        </motion.button>
-        
-        <motion.button
-          onClick={() => window.location.reload()}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          style={{
-            padding: '16px 32px',
-            fontSize: '1.2rem',
-            fontWeight: 'bold',
-            backgroundColor: 'transparent',
-            color: '#fff',
-            border: '2px solid #666',
-            borderRadius: '12px',
-            cursor: 'pointer',
-          }}
-        >
-          🏠 Main Menu
-        </motion.button>
+
+        <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
+          <motion.button
+            onClick={resetGame}
+            whileHover={{ y: -2 }}
+            whileTap={{ scale: 0.96 }}
+            style={{
+              padding: '12px 24px',
+              fontSize: 14,
+              fontWeight: 800,
+              letterSpacing: 1.5,
+              textTransform: 'uppercase',
+              backgroundColor: PALETTE.orange,
+              color: PALETTE.ink,
+              border: `2.5px solid ${PALETTE.outline}`,
+              borderRadius: 8,
+              cursor: 'pointer',
+            }}
+          >
+            Relaunch
+          </motion.button>
+          <motion.button
+            onClick={returnToMenu}
+            whileHover={{ y: -2 }}
+            whileTap={{ scale: 0.96 }}
+            style={{
+              padding: '12px 24px',
+              fontSize: 14,
+              fontWeight: 800,
+              letterSpacing: 1.5,
+              textTransform: 'uppercase',
+              backgroundColor: 'transparent',
+              color: PALETTE.ink,
+              border: `2.5px solid ${PALETTE.outline}`,
+              borderRadius: 8,
+              cursor: 'pointer',
+            }}
+          >
+            Menu
+          </motion.button>
+        </div>
       </motion.div>
     </motion.div>
   );
