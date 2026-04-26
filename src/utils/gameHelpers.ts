@@ -1,4 +1,13 @@
-import { PieceType, PieceShape, PALETTE, Rotation, RockyConfig } from './pieceDefinitions';
+import {
+  PieceType,
+  PieceShape,
+  PALETTE,
+  Rotation,
+  RockyConfig,
+  ArmLength,
+  DEFAULT_ROCKY_CONFIG,
+  rockyGeometry,
+} from './pieceDefinitions';
 
 export interface GridCellData {
   shape: PieceShape;
@@ -189,6 +198,97 @@ export function calculateScore(
     totalLines === 3 ? 600 :
     totalLines * 300;
   return placementPoints + lineBonus;
+}
+
+/**
+ * Counts how many full rows + columns the grid would have if the given cells
+ * were placed at (px, py). Used by the ROCKY auto-shape optimizer.
+ */
+function countLinesIfPlaced(
+  grid: GameGrid,
+  cells: [number, number][],
+  px: number,
+  py: number,
+): number {
+  const placed = new Set<string>();
+  for (const [cx, cy] of cells) placed.add(`${px + cx},${py + cy}`);
+  let lines = 0;
+  for (let y = 0; y < GRID_HEIGHT; y += 1) {
+    let full = true;
+    for (let x = 0; x < GRID_WIDTH; x += 1) {
+      if (grid[y][x] === null && !placed.has(`${x},${y}`)) {
+        full = false;
+        break;
+      }
+    }
+    if (full) lines += 1;
+  }
+  for (let x = 0; x < GRID_WIDTH; x += 1) {
+    let full = true;
+    for (let y = 0; y < GRID_HEIGHT; y += 1) {
+      if (grid[y][x] === null && !placed.has(`${x},${y}`)) {
+        full = false;
+        break;
+      }
+    }
+    if (full) lines += 1;
+  }
+  return lines;
+}
+
+function fits(grid: GameGrid, cells: [number, number][], px: number, py: number): boolean {
+  for (const [cx, cy] of cells) {
+    const gx = px + cx;
+    const gy = py + cy;
+    if (gx < 0 || gx >= GRID_WIDTH || gy < 0 || gy >= GRID_HEIGHT) return false;
+    if (grid[gy][gx] !== null) return false;
+  }
+  return true;
+}
+
+/**
+ * Searches all 243 valid ROCKY configs (3⁵ permutations of arm lengths) and
+ * picks the one whose best placement on the current grid maximizes
+ * `lines_cleared * 100 + cells_placed`. Tie-breaks toward the larger ROCKY.
+ *
+ * Falls back to DEFAULT_ROCKY_CONFIG if no config can be placed anywhere
+ * (the player can still shrink it manually via the editor).
+ */
+export function findOptimalRockyConfig(grid: GameGrid): RockyConfig {
+  const lengths: ArmLength[] = [0, 1, 2];
+  let bestConfig: RockyConfig = DEFAULT_ROCKY_CONFIG;
+  let bestScore = -1;
+  let foundAnyFit = false;
+
+  for (const ul of lengths) {
+    for (const ur of lengths) {
+      for (const ll of lengths) {
+        for (const lm of lengths) {
+          for (const lr of lengths) {
+            const config: RockyConfig = { arms: [ul, ur, ll, lm, lr] };
+            const geom = rockyGeometry(config);
+            let bestPlacementScore = -1;
+            for (let py = 0; py + geom.h <= GRID_HEIGHT; py += 1) {
+              for (let px = 0; px + geom.w <= GRID_WIDTH; px += 1) {
+                if (!fits(grid, geom.cells, px, py)) continue;
+                const lineCount = countLinesIfPlaced(grid, geom.cells, px, py);
+                const score = lineCount * 100 + geom.cells.length;
+                if (score > bestPlacementScore) bestPlacementScore = score;
+              }
+            }
+            if (bestPlacementScore < 0) continue; // doesn't fit anywhere
+            foundAnyFit = true;
+            if (bestPlacementScore > bestScore) {
+              bestScore = bestPlacementScore;
+              bestConfig = config;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return foundAnyFit ? bestConfig : DEFAULT_ROCKY_CONFIG;
 }
 
 export function hasValidMoves(grid: GameGrid, availablePieces: PieceType[]): boolean {

@@ -7,7 +7,7 @@ import { PALETTE, DEFAULT_ROCKY_CONFIG } from '../utils/pieceDefinitions';
 const ARM_LABELS = ['UL', 'UR', 'LL', 'LM', 'LR'] as const;
 
 const RockyArmEditor: React.FC = () => {
-  const { bonusPiece, adjustBonusArm } = useGameStore();
+  const { bonusPiece, adjustBonusArm, reFitBonus } = useGameStore();
   const cfg = bonusPiece?.customization?.rocky ?? DEFAULT_ROCKY_CONFIG;
   const totalCells = cfg.arms.reduce<number>((a, b) => a + b, 0) + 5;
 
@@ -99,6 +99,25 @@ const RockyArmEditor: React.FC = () => {
       {[0, 1, 2, 3, 4].map((i) => (
         <ArmRow key={i} idx={i} />
       ))}
+      <button
+        onClick={reFitBonus}
+        style={{
+          marginTop: 4,
+          padding: '5px 8px',
+          fontSize: 9,
+          fontWeight: 800,
+          letterSpacing: 1.2,
+          textTransform: 'uppercase',
+          background: PALETTE.orange,
+          color: PALETTE.ink,
+          border: `1.5px solid ${PALETTE.outline}`,
+          borderRadius: 6,
+          cursor: 'pointer',
+        }}
+        title="Re-shape ROCKY for the current board"
+      >
+        ✦ Auto-fit
+      </button>
     </div>
   );
 };

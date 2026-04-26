@@ -18,6 +18,7 @@ import {
   clearLines,
   calculateScore,
   hasValidMoves,
+  findOptimalRockyConfig,
   GRID_WIDTH,
   GRID_HEIGHT,
 } from '../utils/gameHelpers';
@@ -34,9 +35,12 @@ import {
 } from '../utils/sound';
 
 const TRAY_SIZE = 3;
-// Tuned: ROCKY arrives every 8 lines (was 5). Rarer = more of a treat, and
-// avoids the bonus slot getting jammed when ROCKY can't fit on a busy board.
-const LINES_TO_BONUS = 8;
+// Progressive milestone intervals: first ROCKY arrives fast, then ramps up.
+// 1st award after 2 lines, 2nd after 4 more, 3rd+ after 8 more each.
+const BONUS_INTERVALS: readonly number[] = [2, 4, 8];
+function nextBonusInterval(awardedCount: number): number {
+  return BONUS_INTERVALS[Math.min(awardedCount, BONUS_INTERVALS.length - 1)];
+}
 const BONUS_SHAPE: PieceShape = 'ROCKY';
 const PERFECT_CLEAR_BONUS = 1000;
 
@@ -65,6 +69,7 @@ export interface GameState {
   theme: Theme;
   bonusPiece: PieceType | null;
   linesToNextBonus: number;
+  bonusesAwarded: number;
   bonusJustUnlocked: boolean;
   scorePopups: ScorePopup[];
   perfectClearAt: number | null;
@@ -85,6 +90,7 @@ export interface GameActions {
   toggleSound: () => void;
   removeScorePopup: (id: string) => void;
   adjustBonusArm: (armIndex: number, delta: 1 | -1) => void;
+  reFitBonus: () => void;
 }
 
 function loadBest(): number {
@@ -141,7 +147,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   lineClearAnimation: null,
   theme: loadTheme(),
   bonusPiece: null,
-  linesToNextBonus: LINES_TO_BONUS,
+  linesToNextBonus: nextBonusInterval(0),
+  bonusesAwarded: 0,
   bonusJustUnlocked: false,
   scorePopups: [],
   perfectClearAt: null,
@@ -175,7 +182,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       lineClearAnimation: null,
       theme,
       bonusPiece: null,
-      linesToNextBonus: LINES_TO_BONUS,
+      linesToNextBonus: nextBonusInterval(0),
+      bonusesAwarded: 0,
       bonusJustUnlocked: false,
       scorePopups: [],
       perfectClearAt: null,
@@ -226,6 +234,13 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     set({ bonusPiece: applyRockyConfig(bonusPiece, { arms: newArms }) });
   },
 
+  reFitBonus: () => {
+    const { bonusPiece, grid } = get();
+    if (!bonusPiece || bonusPiece.shape !== 'ROCKY') return;
+    const cfg = findOptimalRockyConfig(grid);
+    set({ bonusPiece: applyRockyConfig(bonusPiece, cfg) });
+  },
+
   placePieceOnGrid: (piece, x, y): boolean => {
     const state = get();
     if (!canPlacePiece(state.grid, piece, x, y)) return false;
@@ -257,13 +272,20 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     }
 
     let bonusCountdown = state.linesToNextBonus;
+    let newBonusesAwarded = state.bonusesAwarded;
     let bonusJustUnlocked = false;
-    if (hasClears) {
+    let shouldOptimizeBonus = false;
+    // Only count down toward the next bonus when the slot is empty —
+    // otherwise the player could stockpile lines and get a free instant
+    // re-award the moment they place the current ROCKY.
+    if (hasClears && newBonus === null) {
       bonusCountdown = Math.max(0, bonusCountdown - clearedCount);
-      if (bonusCountdown === 0 && newBonus === null) {
+      if (bonusCountdown === 0) {
         newBonus = makePiece(BONUS_SHAPE);
-        bonusCountdown = LINES_TO_BONUS;
+        newBonusesAwarded = state.bonusesAwarded + 1;
+        bonusCountdown = nextBonusInterval(newBonusesAwarded);
         bonusJustUnlocked = true;
+        shouldOptimizeBonus = true;
       }
     }
 
@@ -332,6 +354,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
         availablePieces: newTray,
         bonusPiece: newBonus,
         linesToNextBonus: bonusCountdown,
+        bonusesAwarded: newBonusesAwarded,
         bonusJustUnlocked,
         draggedPiece: null,
         draggedPieceInstanceId: null,
@@ -362,6 +385,13 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
           });
           playPerfectClear();
         }
+        // If a bonus was unlocked this turn, auto-shape it now against the
+        // freshly-cleared grid so it's most useful for the player.
+        let optimizedBonus = s.bonusPiece;
+        if (shouldOptimizeBonus && optimizedBonus && optimizedBonus.shape === 'ROCKY') {
+          const cfg = findOptimalRockyConfig(cleared);
+          optimizedBonus = applyRockyConfig(optimizedBonus, cfg);
+        }
         const gameOver = !hasValidMoves(
           cleared,
           s.availablePieces.filter((p): p is PieceType => p !== null),
@@ -378,6 +408,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
           score: scoreAfterPerfect,
           perfectClearAt: isPerfect ? Date.now() : s.perfectClearAt,
           scorePopups: [...s.scorePopups, ...morePopups],
+          bonusPiece: optimizedBonus,
         });
       }, 420);
     } else {
